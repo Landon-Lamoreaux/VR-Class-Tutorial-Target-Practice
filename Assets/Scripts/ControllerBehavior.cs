@@ -14,7 +14,7 @@ public class ControllerBehavior : MonoBehaviour
     private bool isGripped;
 
     private Arc[] arcScripts;
-    //private Grab[] grabScripts;
+    private Grab[] grabScripts;
 
     [SerializeField]
     InputDeviceCharacteristics hand = InputDeviceCharacteristics.Right;
@@ -23,7 +23,7 @@ public class ControllerBehavior : MonoBehaviour
     void Start()
     {
         arcScripts = GameObject.FindObjectsOfType<Arc>();
-        //grabScripts = GameObject.FindObjectsOfType<Grab>();
+        grabScripts = GameObject.FindObjectsOfType<Grab>();
     }
 
     void Update()
@@ -75,7 +75,10 @@ public class ControllerBehavior : MonoBehaviour
                 {
                     if (!isGripped)  // Is the button up on last frame?
                     {
-                        // TODO grab
+                        foreach (Grab g in grabScripts)
+                        {
+                            g.GrabItem(device.characteristics.HasFlag(InputDeviceCharacteristics.Left));
+                        }
                     }
                 }
                 else // Was the button up on this frame?
@@ -83,7 +86,10 @@ public class ControllerBehavior : MonoBehaviour
 
                     if (isGripped)  // Is the button up on this frame?
                     {
-                        // TODO drop
+                        foreach (Grab g in grabScripts)
+                        {
+                            g.DropItem(device.characteristics.HasFlag(InputDeviceCharacteristics.Left));
+                        }
                     }
                 }
 
